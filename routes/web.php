@@ -25,7 +25,8 @@ Route::get('/contact',[HomeController::class, 'contact'])
 
 Route::get('/single', AboutController::class);
 
-Route::resource('posts', PostsController::class)->only('index','show','create','store');
+Route::resource('posts', PostsController::class);
+// ->only('index','show','create','store','edit','update','destroy');
 
 $posts = BlogPost::all();
 
@@ -51,7 +52,7 @@ $posts = BlogPost::all();
 Route::get('/posts', function() use ($posts){
     
     return view('posts.index', ['posts'=>$posts]);
-});
+})->name('posts.index');
 
 Route::get('/posts/{post_id?}', function ($post_id = 1) use ($posts) { 
 
