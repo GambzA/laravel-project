@@ -8,7 +8,7 @@
     @csrf
     @method('PUT')
     @include('posts.partials.form')
-    <div><input type="submit" value="update"></div>
+    <div class="d-grid gap-2"><input type="submit" value="update" class="btn btn-primary btn-block"></div>
 </form>
 
 
