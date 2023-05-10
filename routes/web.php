@@ -49,16 +49,18 @@ $posts = BlogPost::all();
 //     ]
 // ];   
 
-Route::get('/posts', function() use ($posts){
-    
-    return view('posts.index', ['posts'=>$posts]);
+Route::get('/posts', function () {
+    $posts = BlogPost::all();
+
+    return view('posts.index', ['posts' => $posts]);
 })->name('posts.index');
 
-Route::get('/posts/{post_id?}', function ($post_id = 1) use ($posts) { 
+Route::get('/posts/{post_id?}', function ($post_id = 1) {
+    $post = BlogPost::find($post_id);
 
-    abort_if(!isset($posts[$post_id]), 404, 'This page does not exist yet :(');
+    abort_if(!$post, 404, 'This page does not exist yet :(');
 
-    return view('posts.show', ['post'=>$posts[$post_id]]);
+    return view('posts.show', ['post' => $post]);
 })->name('posts.show');
 
 Route::prefix('/fun')->name('fun.')->group(function() use($posts){
