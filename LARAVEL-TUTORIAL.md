@@ -34,3 +34,8 @@ Probable cause is that the data is being fetched globally in the routers. Try mo
 
 ## MessageBag
 [Laravel Message Bag Docs](https://laravel.com/api/9.x/Illuminate/Support/MessageBag.html)
+
+## Incase `blog_post` table is missing or not found
+`$post = BlogPost::all();` is the culprit
+
+## Eloquent One to One
