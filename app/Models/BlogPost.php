@@ -21,4 +21,9 @@ class BlogPost extends Model
 
         return $attributes;
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

@@ -5,29 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorePost;
 use App\Models\BlogPost;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PostsController extends Controller
 {
-
-    private array $posts = [
-        1 => [
-            'title' => 'Intro to Laravel',
-            'content' => 'This is a short intro to Laravel',
-            'is_new' => true,
-            'has_comments' => true
-        ],
-        2 => [
-            'title' => 'Intro to PHP',
-            'content' => 'This is a short intro to PHP',
-            'is_new' => false
-        ],
-        3 => [
-            'title' => 'Intro to Controllers',
-            'content' => 'This is a short intro to Controllers',
-            'is_new' => false
-        ]
-    ];  
-
     /**
      * Display a listing of the resource.
      *
@@ -35,7 +16,7 @@ class PostsController extends Controller
      */
     public function index()
     {
-        return view('posts.index', ['posts'=> BlogPost::all()]);
+        return view('posts.index', ['posts'=> BlogPost::withCount('comments')->get()]);
     }
 
     /**
@@ -62,7 +43,7 @@ class PostsController extends Controller
 
         $request->session()->flash('status', 'The blog post was created!');
 
-        return redirect()->route('posts.show',['post_id'=>$post->id]);
+        return redirect()->route('posts.show',['post'=>$post->id]);
     }
 
     /**
@@ -71,11 +52,10 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($post_id)
     {
         // abort_if(!isset($this->posts[$id]), 404, 'This page does not exist yet :(');
-
-        return view('posts.show', ['post'=>BlogPost::findOrFail($id)]);
+        return view('posts.show', ['post'=>BlogPost::findOrFail($post_id)]);
     }
 
     /**
@@ -104,7 +84,7 @@ class PostsController extends Controller
         $post->save();
 
         $request->session()->flash('status','Blog post was updated!');
-        return redirect()->route('posts.show',['post_id'=>$post->id]);
+        return redirect()->route('posts.show',['post'=>$post->id]);
     }
 
     /**

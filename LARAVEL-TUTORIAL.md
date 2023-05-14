@@ -39,3 +39,12 @@ Probable cause is that the data is being fetched globally in the routers. Try mo
 `$post = BlogPost::all();` is the culprit
 
 ## Eloquent One to One
+
+## getQueryLog L9 vs L8
+In Laravel 8 it prints all the queries, but they've changed it on Laravel 9
+
+## Counting Related Models
+`$posts = BlogPost::withCount('comments')->get();`
+### Fetching brand new rows
+`$posts = BlogPost::withCount(['comments', 'comments as new_comments' => function($query){$query->where('created_at', '>=', '2023-05-14'); }])->get();`
+

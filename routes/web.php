@@ -23,48 +23,29 @@ Route::get('/', [HomeController::class, 'home'])
 Route::get('/contact',[HomeController::class, 'contact'])
     ->name('home.contact');
 
-Route::get('/single', AboutController::class);
+// Route::get('/single', AboutController::class);
 
 Route::resource('posts', PostsController::class);
 // ->only('index','show','create','store','edit','update','destroy');
 
-$posts = BlogPost::all();
-
-// $posts = [
-//     1 => [
-//         'title' => 'Intro to Laravel',
-//         'content' => 'This is a short intro to Laravel',
-//         'is_new' => true,
-//         'has_comments' => true
-//     ],
-//     2 => [
-//         'title' => 'Intro to PHP',
-//         'content' => 'This is a short intro to PHP',
-//         'is_new' => false
-//     ],
-//     3 => [
-//         'title' => 'Intro to Controllers',
-//         'content' => 'This is a short intro to Controllers',
-//         'is_new' => false
-//     ]
-// ];   
 
 Route::get('/posts', function () {
     $posts = BlogPost::all();
-
+    
     return view('posts.index', ['posts' => $posts]);
 })->name('posts.index');
 
-Route::get('/posts/{post_id?}', function ($post_id = 1) {
-    $post = BlogPost::find($post_id);
-
+Route::get('/posts/{post?}', function ($post = 1) {
+    $post = BlogPost::findOrFail($post);
+    
     abort_if(!$post, 404, 'This page does not exist yet :(');
 
     return view('posts.show', ['post' => $post]);
 })->name('posts.show');
 
-Route::prefix('/fun')->name('fun.')->group(function() use($posts){
-    Route::get('/responses', function() use ($posts){
+/* Route::prefix('/fun')->name('fun.')->group(function() {
+    Route::get('/responses', function(){
+        $posts = BlogPost::all();
         return response($posts, 201)
         ->header('Content-Type','application/json')
         ->cookie('MY_COOKIE','Roi Gamba', 3600);
@@ -86,11 +67,13 @@ Route::prefix('/fun')->name('fun.')->group(function() use($posts){
         return redirect()->away('https://google.com');
     });
     
-    Route::get('/json', function() use ($posts){
+    Route::get('/json', function(){
+        $posts = BlogPost::all();
         return response()->json($posts);
     });
     
-    Route::get('/download', function() use ($posts){
+    Route::get('/download', function(){
+        $posts = BlogPost::all();
         return response()->download(public_path('/me.png'), 'profile.png');
     });
-});
+}); */
