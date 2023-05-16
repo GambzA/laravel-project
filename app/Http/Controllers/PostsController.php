@@ -55,7 +55,9 @@ class PostsController extends Controller
     public function show($post_id)
     {
         // abort_if(!isset($this->posts[$id]), 404, 'This page does not exist yet :(');
-        return view('posts.show', ['post'=>BlogPost::findOrFail($post_id)]);
+        return view('posts.show', [
+            'post'=>BlogPost::with('comments')->findOrFail($post_id)
+        ]);
     }
 
     /**

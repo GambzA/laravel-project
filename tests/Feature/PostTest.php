@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\BlogPost;
+use App\Models\Comment;
 
 class PostTest extends TestCase
 {
@@ -107,14 +108,30 @@ class PostTest extends TestCase
         $this->assertDatabaseMissing('blog_posts',$post->toArray());
     }
 
+    public function test_see_1_blog_post_with_comments()
+    {
+        $post = $this->create_dummy_blog_post();
+        $comment = new Comment;
+        $comment->factory(4)->create([
+            'blog_post_id' => $post->id
+        ]);
+
+        $response = $this->get('/posts');
+        // dd($response);
+
+        $response->assertSeeText('Number of comments: 4');
+    }
+
     public function create_dummy_blog_post(): BlogPost
     {
         // Arrange
-        $post = new BlogPost();
-        $post->title = 'New title2';
-        $post->content = 'Content for the new blogpost2';
-        $post->save();
+        // $bp = new BlogPost;
+        // $bp->title = 'New title2';
+        // $bp->content = 'Content for the new blogpost2';
+        // $bp->save();
+        $bp = BlogPost::factory()->defaults()->create();
 
-        return $post;
+        return $bp;
     }
+
 }
